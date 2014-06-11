@@ -14,7 +14,7 @@ var Collection = require('fhdb-collection'),
 	util = require('util');
 
 function People () {
-	
+	Collection.call(this);
 }
 util.inherits(People, Collection);
 module.exports = People;
