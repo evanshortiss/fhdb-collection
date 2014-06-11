@@ -1,12 +1,12 @@
 {
-  "name": "fh-db-wrapper",
+  "name": "fhdb-collection",
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Evan Shortiss",
   "license": "MIT",
   "dependencies": {
     "fh-api": "~0.2.6"
