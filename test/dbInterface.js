@@ -108,7 +108,20 @@ describe('dbInterface', function () {
 
   // Find one
   describe('#findOne', function () {
-    it('Should insert and remove a user', function (done) {
+    it('Should return null as no user exists', function (done) {
+      db.findOne(USERS, {
+        eq: {
+          name: SAMPLE_USER.name
+        }
+      }, function (err, u) {
+        assert.equal(err, null);
+        assert.equal(u, null)
+
+        done();
+      });
+    });
+
+    it('Should insert and find a single user', function (done) {
       db.create(USERS, SAMPLE_USER, function (err, count) {
         // Get user
         db.findOne(USERS, {
@@ -117,6 +130,7 @@ describe('dbInterface', function () {
           }
         }, function (err, u) {
           assert.equal(err, null);
+          assert.equal(typeof u, 'object');
 
           done();
         });
