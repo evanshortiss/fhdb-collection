@@ -15,6 +15,7 @@ var Collection = require('fhdb-collection'),
 
 function People () {
 	Collection.call(this);
+	this.colName = 'people';
 }
 util.inherits(People, Collection);
 
@@ -22,7 +23,7 @@ People.prototype.customMethod = function () {
 	// Do something!
 };
 
-module.exports = new People();
+module.exports = new People('people');
 
 ```
 
@@ -49,3 +50,5 @@ correspond to $fh.db functions.
 * remove (guid, callback)
 * truncate (callback)
 * find ([opts,] callback)
+* findOne ([opts,] callback)
+* findBy (property, value, callback)

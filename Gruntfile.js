@@ -47,6 +47,7 @@ module.exports = function(grunt) {
             statements: 75
           },
           root: './lib',
+          reporter: 'spec',
           reportFormats: ['html', 'lcovonly']
         }
       }
