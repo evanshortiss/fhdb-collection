@@ -17,11 +17,12 @@ function People () {
 	Collection.call(this);
 }
 util.inherits(People, Collection);
-module.exports = People;
 
 People.prototype.customMethod = function () {
 	// Do something!
 };
+
+module.exports = new People();
 
 ```
 
@@ -39,11 +40,12 @@ People.create({
 ```
 
 ## Class Functions
-Any class that inherits from this receives the following functions.
+Any class that inherits from this receives the following functions. Which 
+correspond to $fh.db functions.
 
 * create (data, callback) 
 * update (guid, data, callback)
 * read (guid, callback)
 * remove (guid, callback)
 * truncate (callback)
-* find (opts, callback)
+* find ([opts,] callback)
