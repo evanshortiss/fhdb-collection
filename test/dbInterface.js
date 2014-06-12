@@ -106,6 +106,25 @@ describe('dbInterface', function () {
   });
 
 
+  // Find one
+  describe('#findOne', function () {
+    it('Should insert and remove a user', function (done) {
+      db.create(USERS, SAMPLE_USER, function (err, count) {
+        // Get user
+        db.findOne(USERS, {
+          eq: {
+            name: SAMPLE_USER.name
+          }
+        }, function (err, u) {
+          assert.equal(err, null);
+
+          done();
+        });
+      });
+    });
+  });
+
+
   // Remove
   describe('#remove', function () {
     it('Should insert and remove a user', function (done) {
