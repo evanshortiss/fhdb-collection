@@ -42,6 +42,13 @@ describe('Collection', function () {
   });
 
 
+  describe('#getCollectionName', function () {
+    it('Should get the name of the db collection', function () {
+      assert.equal(testCollection.getCollectionName(), testCollection.colName);
+    });
+  })
+
+
   // Update
   describe('#update', function () {
     it('Should create a user and update their name', function (done) {
@@ -167,6 +174,19 @@ describe('Collection', function () {
               done();
             });
           });
+        });
+      });
+    });
+  });
+
+  // Find by
+  describe('#findBy', function () {
+    it('Should find a user by name', function (done) {
+      testCollection.create(SAMPLE_USER, function (err, count) {
+        testCollection.findBy('name', SAMPLE_USER.name, function (err, list) {
+          assert.equal(list.length, 1);
+          assert.equal(list[0].name, SAMPLE_USER.name);
+          done();
         });
       });
     });
