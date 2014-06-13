@@ -52,3 +52,24 @@ correspond to $fh.db functions.
 * find ([opts,] callback)
 * findOne ([opts,] callback)
 * findBy (property, value, callback)
+
+## Contributing
+We could make this module more flexible to support models etc so you could do 
+the following:
+
+```javascript
+// Item.js inherits from our Model class
+var Item = require('./Item.js');
+
+var i = new Item({
+	type: 'car',
+	condition: 'great'
+});
+
+
+i.save(function(err) {
+	if (err) {
+		// It didn't save...
+	}
+});
+```
