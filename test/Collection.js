@@ -1,6 +1,6 @@
 'use strict';
 
-var assert = require('assert')
+var expect = require('chai').expect
   , fh = require('fh-api')
   , testCollection = require('./TestCol');
 
@@ -31,9 +31,9 @@ describe('Collection', function () {
   describe('#create', function () {
 
     it('Should run create without an error', function (done) {
-      testCollection.create(SAMPLE_USER, function (err, count) {
-        assert.equal(err, null);
-        assert.equal(count, 1);
+      testCollection.create(SAMPLE_USER, function (err, res) {
+        expect(err).to.not.be.ok;
+        expect(res).to.be.defined;
 
         done();
       });
@@ -44,7 +44,8 @@ describe('Collection', function () {
 
   describe('#getCollectionName', function () {
     it('Should get the name of the db collection', function () {
-      assert.equal(testCollection.getCollectionName(), testCollection.colName);
+      expect(testCollection.getCollectionName())
+        .to.equal(testCollection.colName);
     });
   })
 
@@ -52,19 +53,18 @@ describe('Collection', function () {
   // Update
   describe('#update', function () {
     it('Should create a user and update their name', function (done) {
-      testCollection.create(SAMPLE_USER, function (err, count) {
+      testCollection.create(SAMPLE_USER, function (err) {
         testCollection.find(function (err, users) {
-          var user = users[0];
-          assert.equal(err, null);
-          assert.equal(SAMPLE_USER.name, user.name);
+          var user = users.list[0];
+          expect(err).to.not.be.ok;
+          expect(SAMPLE_USER.name).to.equal(user.fields.name);
 
           testCollection.update(user.guid, {name: 'newName'}, function (err) {
-            assert.equal(err, null);
+            expect(err).to.not.be.ok;
 
-            testCollection.read(user.guid, function (err, updatedUser) {
-              assert.equal(err, null);
-              assert.equal(updatedUser.name, 'newName');
-
+            testCollection.read(user.guid, function (err, user) {
+              expect(err).to.not.be.ok;
+              expect(user.fields.name).to.equal('newName');
               done();
             });
           });
@@ -78,23 +78,10 @@ describe('Collection', function () {
     it('Should retrieve list of users with length 1', function (done) {
       testCollection.create(SAMPLE_USER, function (err, count) {
         testCollection.find({}, function (err, users) {
-          assert.equal(err, null);
-          assert.equal(users.length, 1);
-          assert.equal(users[0].name, SAMPLE_USER.name);
-          assert.equal(users[0].age, SAMPLE_USER.age);
-
-          done();
-        });
-      });
-    });
-
-    it('Should retrieve list of users with length 1', function (done) {
-      testCollection.create(SAMPLE_USER, function (err, count) {
-        testCollection.find(function (err, users) {
-          assert.equal(err, null);
-          assert.equal(users.length, 1);
-          assert.equal(users[0].name, SAMPLE_USER.name);
-          assert.equal(users[0].age, SAMPLE_USER.age);
+          expect(err).to.not.be.ok;
+          expect(users.count).to.equal(1);
+          expect(users.list[0].fields.name).to.equal(SAMPLE_USER.name);
+          expect(users.list[0].fields.age).to.equal(SAMPLE_USER.age);
 
           done();
         });
@@ -107,8 +94,8 @@ describe('Collection', function () {
           name: 'john'
         }
       }, function (err, users) {
-        assert.equal(err, null);
-        assert.equal(users.length, 0);
+        expect(err).to.not.be.ok;
+        expect(users.count).to.equal(0);
 
         done();
       });
@@ -124,8 +111,8 @@ describe('Collection', function () {
           name: SAMPLE_USER.name
         }
       }, function (err, u) {
-        assert.equal(err, null);
-        assert.equal(u, null)
+        expect(err).to.not.be.ok;
+        expect(u).to.equal(null);
 
         done();
       });
@@ -139,8 +126,8 @@ describe('Collection', function () {
             name: SAMPLE_USER.name
           }
         }, function (err, u) {
-          assert.equal(err, null);
-          assert.equal(typeof u, 'object');
+          expect(err).to.not.be.ok;
+          expect(u).to.be.an('object');
 
           done();
         });
@@ -159,17 +146,17 @@ describe('Collection', function () {
             name: SAMPLE_USER.name
           }
         }, function (err, users) {
-          assert.equal(err, null);
-          assert.equal(users.length, 1);
+          expect(err).to.not.be.ok;
+          expect(users.count).to.equal(1);
 
           // Remove using guid
-          testCollection.remove(users[0].guid, function (err) {
-            assert.equal(err, null);
+          testCollection.remove(users.list[0].guid, function (err) {
+            expect(err).to.not.be.ok;
 
             // Verify user is no longer present
             testCollection.find(function (err, users) {
-              assert.equal(err, null);
-              assert.equal(users.length, 0);
+              expect(err).to.not.be.ok;
+              expect(users.count).to.equal(0);
 
               done();
             });
@@ -183,9 +170,10 @@ describe('Collection', function () {
   describe('#findBy', function () {
     it('Should find a user by name', function (done) {
       testCollection.create(SAMPLE_USER, function (err, count) {
-        testCollection.findBy('name', SAMPLE_USER.name, function (err, list) {
-          assert.equal(list.length, 1);
-          assert.equal(list[0].name, SAMPLE_USER.name);
+        testCollection.findBy('name', SAMPLE_USER.name, function (err, users) {
+          expect(err).to.not.be.ok;
+          expect(users.count).to.equal(1);
+          expect(users.list[0].fields.name).to.equal(SAMPLE_USER.name);
           done();
         });
       });
@@ -197,10 +185,10 @@ describe('Collection', function () {
     it('Should clear the database', function (done) {
       testCollection.create(SAMPLE_USER, function (err, count) {
         testCollection.truncate(function (err) {
-          assert.equal(err, null);
+          expect(err).to.not.be.ok;
 
-          testCollection.find(function (err, list) {
-            assert.equal(list.length, 0);
+          testCollection.find(function (err, users) {
+            expect(users.count).to.equal(0);
             done();
           });
         });
