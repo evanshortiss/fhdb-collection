@@ -109,9 +109,9 @@ describe('dbInterface', function () {
           eq: {
             name: SAMPLE_USER.name
           }
-        }, function (err, users) {
+        }, function (err, user) {
           expect(err).to.not.be.ok;
-          expect(users.count).to.equal(1);
+          expect(user).to.be.an('object');
           done();
         });
       });

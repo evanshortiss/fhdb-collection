@@ -1,11 +1,12 @@
 {
   "name": "fhdb-collection",
-  "version": "0.1.0",
+  "version": "0.1.01",
   "description": "Collection based wrapper for the FeedHenry database API to facilitate ease of use.",
   "main": "./lib/index.js",
   "scripts": {
     "test": "grunt test"
   },
+  "repository": "https://github.com/feedhenry-staff/fhdb-collection",
   "author": "Evan Shortiss",
   "license": "MIT",
   "devDependencies": {
@@ -16,6 +17,9 @@
     "mocha": "~1.20.1",
     "grunt-mocha-istanbul": "~1.4.1",
     "chai": "~1.9.1",
+    "fh-mbaas-api": "~4.7.1"
+  },
+  "dependencies": {
     "fh-mbaas-api": "~4.7.1"
   }
 }
