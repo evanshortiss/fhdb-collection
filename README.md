@@ -1,8 +1,7 @@
 fh-db Collection
 ================
 
-Simple wrapper around the $fh.db API to allow the creation of Models to 
-represent data objects.
+Simple wrapper around the $fh.db API to allow the creation of Collection wrappers with high level methods attached.
 
 ## Example Usage
 
