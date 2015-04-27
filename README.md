@@ -1,8 +1,7 @@
 fh-db Collection
 ================
 
-Simple wrapper around the $fh.db API to allow the creation of Models to 
-represent data objects.
+Simple wrapper around the $fh.db API to allow the creation of Collection wrappers with high level methods attached.
 
 ## Example Usage
 
@@ -14,8 +13,7 @@ var Collection = require('fhdb-collection'),
 	util = require('util');
 
 function People () {
-	Collection.call(this);
-	this.colName = 'people';
+	Collection.call(this, 'People');
 }
 util.inherits(People, Collection);
 
@@ -35,8 +33,8 @@ var People = require('./People');
 People.create({
 	name: 'john',
 	age: '23'
-}, function (err, count) {
-	// Count will be 1 
+}, function (err, res) {
+	// Receives the usual fh-db callback results
 });
 ```
 

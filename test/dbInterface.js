@@ -1,6 +1,6 @@
 'use strict';
 
-var assert = require('assert')
+var expect = require('chai').expect
   , fh = require('fh-api')
   , db = require('../lib/dbInterface');
 
@@ -30,31 +30,27 @@ describe('dbInterface', function () {
 
   // Create
   describe('#create', function () {
-
     it('Should run create without an error', function (done) {
-      db.create(USERS, SAMPLE_USER, function (err, count) {
-        assert.equal(err, null);
-        assert.equal(count, 1);
-
+      db.create(USERS, SAMPLE_USER, function (err, res) {
+        expect(err).to.not.be.ok;
+        expect(res).to.be.defined;
         done();
       });
     });
-
   });
-
 
   // Update
   describe('#update', function () {
     it('Should create a user and update their name', function (done) {
-      db.create(USERS, SAMPLE_USER, function (err, count) {
+      db.create(USERS, SAMPLE_USER, function (err) {
+        expect(err).to.not.be.ok;
         db.find(USERS, function (err, users) {
-          var user = users[0];
-          assert.equal(SAMPLE_USER.name, user.name);
+          var user = users.list[0];
+          expect(SAMPLE_USER.name).to.equal(user.fields.name);
 
           db.update(USERS, user.guid, {name: 'newName'}, function (err) {
             db.read(USERS, user.guid, function (err, updatedUser) {
-              assert.equal(updatedUser.name, 'newName');
-
+              expect(updatedUser.fields.name).to.equal('newName');
               done();
             });
           });
@@ -68,24 +64,10 @@ describe('dbInterface', function () {
     it('Should retrieve list of users with length 1', function (done) {
       db.create(USERS, SAMPLE_USER, function (err, count) {
         db.find(USERS, {}, function (err, users) {
-          assert.equal(err, null);
-          assert.equal(users.length, 1);
-          assert.equal(users[0].name, SAMPLE_USER.name);
-          assert.equal(users[0].age, SAMPLE_USER.age);
-
-          done();
-        });
-      });
-    });
-
-    it('Should retrieve list of users with length 1', function (done) {
-      db.create(USERS, SAMPLE_USER, function (err, count) {
-        db.find(USERS, function (err, users) {
-          assert.equal(err, null);
-          assert.equal(users.length, 1);
-          assert.equal(users[0].name, SAMPLE_USER.name);
-          assert.equal(users[0].age, SAMPLE_USER.age);
-
+          expect(err).to.not.be.ok;
+          expect(users.count).to.equal(1);
+          expect(users.list[0].fields.name).to.equal(SAMPLE_USER.name);
+          expect(users.list[0].fields.age).to.equal(SAMPLE_USER.age);
           done();
         });
       });
@@ -97,9 +79,8 @@ describe('dbInterface', function () {
           name: 'john'
         }
       }, function (err, users) {
-        assert.equal(err, null);
-        assert.equal(users.length, 0);
-
+        expect(err).to.not.be.ok;
+        expect(users.count).to.equal(0);
         done();
       });
     });
@@ -113,25 +94,24 @@ describe('dbInterface', function () {
         eq: {
           name: SAMPLE_USER.name
         }
-      }, function (err, u) {
-        assert.equal(err, null);
-        assert.equal(u, null)
+      }, function (err, user) {
+        expect(err).to.not.be.ok;
+        expect(user).to.equal(null);
 
         done();
       });
     });
 
     it('Should insert and find a single user', function (done) {
-      db.create(USERS, SAMPLE_USER, function (err, count) {
+      db.create(USERS, SAMPLE_USER, function (err) {
         // Get user
         db.findOne(USERS, {
           eq: {
             name: SAMPLE_USER.name
           }
-        }, function (err, u) {
-          assert.equal(err, null);
-          assert.equal(typeof u, 'object');
-
+        }, function (err, user) {
+          expect(err).to.not.be.ok;
+          expect(user).to.be.an('object');
           done();
         });
       });
@@ -149,17 +129,17 @@ describe('dbInterface', function () {
             name: SAMPLE_USER.name
           }
         }, function (err, users) {
-          assert.equal(err, null);
-          assert.equal(users.length, 1);
+          expect(err).to.not.be.ok;
+          expect(users.count).to.equal(1);
 
           // Remove using guid
-          db.remove(USERS, users[0].guid, function (err) {
-            assert.equal(err, null);
+          db.remove(USERS, users.list[0].guid, function (err) {
+            expect(err).to.not.be.ok;
 
             // Verify user is no longer present
-            db.find(USERS, function (err, users) {
-              assert.equal(err, null);
-              assert.equal(users.length, 0);
+            db.find(USERS, function (err, users_) {
+              expect(err).to.not.be.ok;
+              expect(users_.count).to.equal(0);
 
               done();
             });
@@ -174,10 +154,10 @@ describe('dbInterface', function () {
     it('Should clear the database', function (done) {
       db.create(USERS, SAMPLE_USER, function (err, count) {
         db.truncate(USERS, function (err) {
-          assert.equal(err, null);
+          expect(err).to.not.be.ok;
 
           db.find(USERS, function (err, list) {
-            assert.equal(list.length, 0);
+            expect(list.count).to.equal(0);
             done();
           });
         });
